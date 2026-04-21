@@ -1,24 +1,13 @@
 import javax.swing.text.html.HTML;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class TextProcessor {
+public class TextProcessor<LS extends ListStrategy> {
     private StringBuilder sb = new StringBuilder();
-    private ListStrategy listStrategy;
+    private final LS listStrategy;
 
-    public void setOutputFormat(OutputFormat outputFormat) {
-        switch (outputFormat) {
-            case HTML :
-                listStrategy = new HTMLListStrategy();
-                break;
-            case MARKDOWN:
-                listStrategy = new MarkdownListStrategy();
-                break;
-
-        }
-    }
-
-    public TextProcessor(OutputFormat outputFormat) {
-        setOutputFormat(outputFormat);
+    public TextProcessor(Supplier<? extends LS> constructor) {
+        listStrategy = constructor.get();
     }
 
     public void addList(List<String> list){
